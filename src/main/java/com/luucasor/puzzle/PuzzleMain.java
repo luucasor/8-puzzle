@@ -48,11 +48,6 @@ public class PuzzleMain {
             System.out.print(ANSI_RED+ "Valor inválido! Tente novamente:"+ANSI_RESET);
             jogar(tabuleiro);
         }
-        //Limpa a tela no windows, no linux e no MacOS
-        if (System.getProperty("os.name").contains("Windows"))
-            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-        else
-            Runtime.getRuntime().exec("clear");
     }
 
     private static void cabecalho(Tabuleiro tabuleiro){
