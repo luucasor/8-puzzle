@@ -16,10 +16,16 @@ public class Tabuleiro {
             {QUATRO, CINCO, SEIS},
             {SETE, OITO, VAZIO}
     };
+    //int[][] matrizInicial = new int[][]{
+    //        {UM, DOIS, TRES},
+    //        {QUATRO, OITO, SEIS},
+    //        {SETE, CINCO, VAZIO}
+    //};
+
     int[][] matrizInicial = new int[][]{
             {UM, DOIS, TRES},
-            {QUATRO, OITO, SEIS},
-            {SETE, CINCO, VAZIO}
+            {QUATRO, CINCO, SEIS},
+            {SETE, VAZIO, OITO}
     };
 
     public String getStringIndiceValorVazio(){
@@ -48,42 +54,28 @@ public class Tabuleiro {
         return primeiraLinha+segundaLinha+terceiraLinha;
     }
 
-    public void movimentar(String comando) {
+    public boolean movimentar(int valor) {
+        int[][] indicePretendido = this.getIndiceValor(valor);
         int[][] indiceValorVazio = this.getIndiceValorVazio();
 
-        int linhaVazio = indiceValorVazio[0][0];
-        int colunaVazio = indiceValorVazio[0][1];
-
-        Integer valorPretendido = null;
-
-        switch (comando){
-            case "4":
-                valorPretendido = this.matrizInicial[linhaVazio][colunaVazio-1];
-                break;
-            case "6":
-                valorPretendido = this.matrizInicial[linhaVazio][colunaVazio+1];
-                break;
-            case "8":
-                valorPretendido = this.matrizInicial[linhaVazio-1][colunaVazio];
-                break;
-            case "2":
-                valorPretendido = this.matrizInicial[linhaVazio+1][colunaVazio];
-                break;
-        }
-
-        System.out.println(valorPretendido);
-        trocaVazio(valorPretendido, linhaVazio, colunaVazio);
-
+        return trocaVazio(indicePretendido, indiceValorVazio);
     }
 
-    private void trocaVazio(Integer valorPretendido, int linhaVazio, int colunaVazio) {
-        int[][] indiceValor = this.getIndiceValor(valorPretendido);
+    private boolean trocaVazio(int[][] indicePretendido, int[][] indiceValorVazio) {
+        boolean trocou = false;
+        try {
+            int valorPretendido = this.matrizInicial[indicePretendido[0][0]][indicePretendido[0][1]];
+            List valoresDisponiveis = getValoresAdjacentesDentreOsMovimentosDisponiveis();
 
-        int linhaPretendida = indiceValor[0][0];
-        int colunaPretendida = indiceValor[0][1];
+            if(valoresDisponiveis.contains(valorPretendido)){
+                this.matrizInicial[indiceValorVazio[0][0]][indiceValorVazio[0][1]] = valorPretendido;
+                this.matrizInicial[indicePretendido[0][0]][indicePretendido[0][1]] = VAZIO;
+                trocou = true;
+            }
+        } catch (ArrayIndexOutOfBoundsException e){
 
-        this.matrizInicial[linhaVazio][colunaVazio] = valorPretendido;
-        this.matrizInicial[linhaPretendida][colunaPretendida] = VAZIO;
+        }
+        return trocou;
     }
 
 
@@ -161,6 +153,10 @@ public class Tabuleiro {
         }
 
         return movimentosDisponiveisESeusValoresAdjacentes;
+    }
+
+    public boolean venceu() {
+        return Arrays.deepEquals(matrizInicial, matrizAlvo);
     }
 
     public enum SetaEnum {

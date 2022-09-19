@@ -1,10 +1,7 @@
 package com.luucasor.puzzle;
 
 import javax.swing.*;
-import java.util.HashMap;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class PuzzleMain extends JFrame {
 
@@ -17,16 +14,29 @@ public class PuzzleMain extends JFrame {
         System.out.println("Alvo:");
         System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizAlvo()));
         System.out.println();
-        System.out.println("Início:");
+        System.out.println("Jogo em andamento:");
         System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizInicial()));
-        System.out.println("Movimentos disponíveis: "+tabuleiro.getOpcoesDeMovimentoDisponiveis());
-        System.out.println("Informe o movimento de seta desejado: ");
+        System.out.println("Movimentos disponíveis: "+tabuleiro.getValoresAdjacentesDentreOsMovimentosDisponiveis());
+        System.out.println("Informe o movimento número desejado: ");
         System.out.println("");
 
-        Scanner ler = new Scanner(System.in);
-        String comando = ler.nextLine();
-
-        tabuleiro.movimentar(comando);
+        Scanner scanner = new Scanner(System.in);
+        if(tabuleiro.venceu()){
+            System.out.println("||||||||||||||||||| VENCEU |||||||||||||||||||");
+            System.out.println();
+            System.out.println("Alvo:");
+            System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizAlvo()));
+            System.out.println();
+            System.out.println("Jogo finalizado:");
+            System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizInicial()));
+            System.out.println("||||||||||||||||||| VENCEU |||||||||||||||||||");
+            scanner.close();
+            System.exit(0);
+        }
+        while(!scanner.hasNextInt() || !tabuleiro.movimentar(scanner.nextInt())){
+            System.out.println("Valor inválido! Tente novamente.");
+            scanner.next();
+        }
         jogar(tabuleiro);
     }
 }
