@@ -16,11 +16,35 @@ public class Tabuleiro {
             {QUATRO, CINCO, SEIS},
             {SETE, OITO, VAZIO}
     };
-    int[][] matrizInicial = new int[][]{
+    int[][] matrizInicial = new int[3][3];
+
+    int[][] matrizFacil = new int[][]{
             {UM, DOIS, TRES},
-            {QUATRO, OITO, SEIS},
-            {SETE, CINCO, VAZIO}
+            {QUATRO, CINCO, SEIS},
+            {VAZIO, SETE, OITO}
     };
+
+    int[][] matrizMedio = new int[][]{
+            {UM, TRES, VAZIO},
+            {CINCO, DOIS, SEIS},
+            {QUATRO, SETE, OITO}
+    };
+
+    int[][] matrizDificil = new int[][]{
+            {CINCO, VAZIO, UM},
+            {QUATRO, DOIS, TRES},
+            {SETE, OITO, SEIS}
+    };
+
+    HashMap<Integer, String> niveisDificuldade = new HashMap<Integer, String>(){
+        {
+            put(1, "Fácil");
+            put(2, "Médio");
+            put(3, "Difícil");
+        }
+    };
+
+    Integer nivelDificuldadeEscolhida;
 
     public String getStringIndiceValorVazio(){
         int[][] indiceValorVazio = this.getIndiceValorVazio();
@@ -103,6 +127,21 @@ public class Tabuleiro {
         return Arrays.deepEquals(matrizInicial, matrizAlvo);
     }
 
+    public void setNivelDificuldadeEscolhida(Integer valor){
+        this.nivelDificuldadeEscolhida = valor;
+        switch (this.nivelDificuldadeEscolhida){
+            case 1:
+                this.matrizInicial = this.matrizFacil;
+                break;
+            case 2:
+                this.matrizInicial = this.matrizMedio;
+                break;
+            case 3:
+                this.matrizInicial = this.matrizDificil;
+                break;
+        }
+    }
+
     private boolean trocaVazio(int[][] indicePretendido, int[][] indiceValorVazio) {
         boolean trocou = false;
         try {
@@ -139,5 +178,9 @@ public class Tabuleiro {
 
     private int[][] getIndiceValorVazio() {
         return getIndiceValor(VAZIO);
+    }
+
+    public String getStringNivelEscolhido() {
+        return niveisDificuldade.get(nivelDificuldadeEscolhida);
     }
 }

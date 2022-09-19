@@ -10,10 +10,16 @@ public class PuzzleMain {
     public static void main(String[] args) throws IOException, InterruptedException {
         Tabuleiro tabuleiro = new Tabuleiro();
         int numeroJogada = 1;
+
+        System.out.println();
+        System.out.println("|||||||||||||||||| Início ||||||||||||||||||");
+        escolherNivelJogo(tabuleiro);
+
         do {
             System.out.println();
             System.out.println("Jogada: "+numeroJogada);
-            System.out.println("----------");
+            System.out.println("Dificuldade: "+tabuleiro.getStringNivelEscolhido());
+            System.out.println("----------------------------");
             cabecalho(tabuleiro);
             jogar(tabuleiro);
             numeroJogada++;
@@ -21,6 +27,7 @@ public class PuzzleMain {
 
         if(tabuleiro.venceu()){
             System.out.println(ANSI_GREEN+"||||||||||||||||||| VENCEU |||||||||||||||||||"+ANSI_RESET);
+            System.out.println("Dificuldade: "+tabuleiro.getStringNivelEscolhido());
             System.out.println(ANSI_GREEN+"Total jogadas: "+numeroJogada+ANSI_RESET);
             System.out.println();
             System.out.println("Alvo:");
@@ -30,6 +37,26 @@ public class PuzzleMain {
             System.out.println(ANSI_GREEN+tabuleiro.imprimeMatriz(tabuleiro.getMatrizInicial())+ANSI_RESET);
             System.out.println(ANSI_GREEN+"||||||||||||||||||| VENCEU |||||||||||||||||||"+ANSI_RESET);
             System.exit(0);
+        }
+    }
+
+    private static void escolherNivelJogo(Tabuleiro tabuleiro) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Escolha o nível do jogo: ");
+        System.out.print(tabuleiro.getNiveisDificuldade()+ ": ");
+        try {
+            Integer valorInformado = scanner.nextInt();
+            if(0 == valorInformado){
+                System.exit(0);
+            }
+            if(!tabuleiro.getNiveisDificuldade().containsKey(valorInformado)){
+                System.out.println(ANSI_RED+ "Opção indisponível! Tente novamente:"+ANSI_RESET);
+                escolherNivelJogo(tabuleiro);
+            }
+            tabuleiro.setNivelDificuldadeEscolhida(valorInformado);
+        } catch (Exception e){
+            System.out.println(ANSI_RED+ "Valor inválido! Tente novamente:"+ANSI_RESET);
+            escolherNivelJogo(tabuleiro);
         }
     }
 
