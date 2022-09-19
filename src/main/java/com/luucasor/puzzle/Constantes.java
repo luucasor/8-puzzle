@@ -18,4 +18,14 @@ public class Constantes {
     final public static int SETE = 7;
     final public static int OITO = 8;
     final public static int VAZIO = 0;
+
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+
+    public static final String ANSI_ITALIC = "\u001B[3m";
+    public static final String INVISIBLE_TEXT = "\u001B[8m";
+
 }

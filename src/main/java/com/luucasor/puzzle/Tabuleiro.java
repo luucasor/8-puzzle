@@ -16,16 +16,10 @@ public class Tabuleiro {
             {QUATRO, CINCO, SEIS},
             {SETE, OITO, VAZIO}
     };
-    //int[][] matrizInicial = new int[][]{
-    //        {UM, DOIS, TRES},
-    //        {QUATRO, OITO, SEIS},
-    //        {SETE, CINCO, VAZIO}
-    //};
-
     int[][] matrizInicial = new int[][]{
             {UM, DOIS, TRES},
-            {QUATRO, CINCO, SEIS},
-            {SETE, VAZIO, OITO}
+            {QUATRO, OITO, SEIS},
+            {SETE, CINCO, VAZIO}
     };
 
     public String getStringIndiceValorVazio(){
@@ -48,10 +42,11 @@ public class Tabuleiro {
     }
 
     public String imprimeMatriz(int[][] matriz){
-        String primeiraLinha = String.format("| %s | %s | %s |\n", substituiZero(matriz[LINHA_UM][COLUNA_UM]), substituiZero(matriz[LINHA_UM][COLUNA_DOIS]), substituiZero(matriz[LINHA_UM][COLUNA_TRES]));
-        String segundaLinha  = String.format("| %s | %s | %s |\n", substituiZero(matriz[LINHA_DOIS][COLUNA_UM]), substituiZero(matriz[LINHA_DOIS][COLUNA_DOIS]), substituiZero(matriz[LINHA_DOIS][COLUNA_TRES]));
-        String terceiraLinha = String.format("| %s | %s | %s |\n", substituiZero(matriz[LINHA_TRES][COLUNA_UM]), substituiZero(matriz[LINHA_TRES][COLUNA_DOIS]), substituiZero(matriz[LINHA_TRES][COLUNA_TRES]));
-        return primeiraLinha+segundaLinha+terceiraLinha;
+        String primeiraLinha = String.format("| %s | %s | %s |\n", tratarValor(matriz[LINHA_UM][COLUNA_UM]), tratarValor(matriz[LINHA_UM][COLUNA_DOIS]), tratarValor(matriz[LINHA_UM][COLUNA_TRES]));
+        String segundaLinha  = String.format("| %s | %s | %s |\n", tratarValor(matriz[LINHA_DOIS][COLUNA_UM]), tratarValor(matriz[LINHA_DOIS][COLUNA_DOIS]), tratarValor(matriz[LINHA_DOIS][COLUNA_TRES]));
+        String terceiraLinha = String.format("| %s | %s | %s |\n", tratarValor(matriz[LINHA_TRES][COLUNA_UM]), tratarValor(matriz[LINHA_TRES][COLUNA_DOIS]), tratarValor(matriz[LINHA_TRES][COLUNA_TRES]));
+        String matrizImpressao = primeiraLinha+segundaLinha+terceiraLinha;
+        return matrizImpressao;
     }
 
     public boolean movimentar(int valor) {
@@ -79,7 +74,7 @@ public class Tabuleiro {
     }
 
 
-    private String substituiZero(int value){
+    private String tratarValor(int value){
         return value == 0 ? " " : value+"";
     }
 
@@ -151,7 +146,6 @@ public class Tabuleiro {
                 movimentosDisponiveisESeusValoresAdjacentes.put(SetaEnum.DIREITA, valorDireita);
             }
         }
-
         return movimentosDisponiveisESeusValoresAdjacentes;
     }
 
@@ -160,16 +154,6 @@ public class Tabuleiro {
     }
 
     public enum SetaEnum {
-        CIMA("8 = ⬆️"), BAIXO("2 = ⬇️"), ESQUERDA("4 = ⬅️"), DIREITA("6 = ➡️");
-
-        private final String seta;
-
-        SetaEnum(String valor){
-            this.seta = valor;
-        }
-
-        public String toString() {
-            return this.seta;
-        }
+        CIMA, BAIXO, ESQUERDA, DIREITA;
     }
 }
