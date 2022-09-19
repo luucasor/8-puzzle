@@ -50,3 +50,11 @@ O Jogo dos Oito é um jogo de tabuleiro. O jogo é estruturado em um tabuleiro 3
 O limite da implementação fica a critério do candidato;
 Recomenda-se o uso da melhores práticas de desenvolvimento;
 Não limitamos a arquitetura ou solução.
+
+## Como rodar aplicação
+
+Para rodar a aplicação, basta carregá-la em sua IDE de preferência, importando-a como projeto Maven e executar a classe PuzzleMain.java
+Outra alternativa é navegar até a raiz do projeto e executar o comando abaixo:
+```
+mvn exec:java -Dexec.mainClass="com.luucasor.puzzle.PuzzleMain"
+```
