@@ -1,93 +1,29 @@
 package com.luucasor.puzzle;
 
-import java.io.IOException;
-import java.util.Scanner;
+import com.luucasor.puzzle.model.Tabuleiro;
+import com.luucasor.puzzle.service.TabuleiroService;
+import com.luucasor.puzzle.view.Terminal;
 
-import static com.luucasor.puzzle.Constantes.*;
+import java.time.Instant;
 
 public class PuzzleMain {
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        Tabuleiro tabuleiro = new Tabuleiro();
-        int numeroJogada = 1;
+    public static void main(String[] args) {
+        Instant inicio = Instant.now();
 
-        System.out.println();
-        System.out.println("|||||||||||||||||| Início ||||||||||||||||||");
-        escolherNivelJogo(tabuleiro);
+        TabuleiroService tabuleiroService = new TabuleiroService(new Tabuleiro());
+        Terminal terminal = new Terminal(tabuleiroService);
+
+        terminal.cabecalho();
+        terminal.escolherNivelJogo();
 
         do {
-            System.out.println();
-            System.out.println("Jogada: "+numeroJogada);
-            System.out.println("Dificuldade: "+tabuleiro.getStringNivelEscolhido());
-            System.out.println("----------------------------");
-            cabecalho(tabuleiro);
-            jogar(tabuleiro);
-            numeroJogada++;
-        } while (!tabuleiro.venceu());
+            terminal.cabecalhoJogada();
+            terminal.jogar();
+        } while (!tabuleiroService.venceu());
 
-        if(tabuleiro.venceu()){
-            System.out.println(ANSI_GREEN+"||||||||||||||||||| VENCEU |||||||||||||||||||"+ANSI_RESET);
-            System.out.println("Dificuldade: "+tabuleiro.getStringNivelEscolhido());
-            System.out.println(ANSI_GREEN+"Total jogadas: "+numeroJogada+ANSI_RESET);
-            System.out.println();
-            System.out.println("Alvo:");
-            System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizAlvo()));
-            System.out.println();
-            System.out.println("Jogo finalizado:");
-            System.out.println(ANSI_GREEN+tabuleiro.imprimeMatriz(tabuleiro.getMatrizInicial())+ANSI_RESET);
-            System.out.println(ANSI_GREEN+"||||||||||||||||||| VENCEU |||||||||||||||||||"+ANSI_RESET);
-            System.exit(0);
-        }
-    }
-
-    private static void escolherNivelJogo(Tabuleiro tabuleiro) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Escolha o nível do jogo: ");
-        System.out.print(tabuleiro.getNiveisDificuldade()+ ": ");
-        try {
-            Integer valorInformado = scanner.nextInt();
-            if(0 == valorInformado){
-                System.exit(0);
-            }
-            if(!tabuleiro.getNiveisDificuldade().containsKey(valorInformado)){
-                System.out.println(ANSI_RED+ "Opção indisponível! Tente novamente:"+ANSI_RESET);
-                escolherNivelJogo(tabuleiro);
-            }
-            tabuleiro.setNivelDificuldadeEscolhida(valorInformado);
-        } catch (Exception e){
-            System.out.println(ANSI_RED+ "Valor inválido! Tente novamente:"+ANSI_RESET);
-            escolherNivelJogo(tabuleiro);
-        }
-    }
-
-    private static void jogar(Tabuleiro tabuleiro) throws IOException, InterruptedException {
-        Scanner scanner = new Scanner(System.in);
-        try {
-            Integer valorInformado = scanner.nextInt();
-            if(0 == valorInformado){
-                System.exit(0);
-            }
-            if(!tabuleiro.movimentar(valorInformado)){
-                System.out.print(ANSI_RED+ "Opção indisponível! Tente novamente:"+ANSI_RESET);
-                jogar(tabuleiro);
-            }
-        } catch (Exception e){
-            System.out.print(ANSI_RED+ "Valor inválido! Tente novamente:"+ANSI_RESET);
-            jogar(tabuleiro);
-        }
-    }
-
-    private static void cabecalho(Tabuleiro tabuleiro){
-        System.out.println();
-        System.out.println("Alvo:");
-        System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizAlvo()));
-        System.out.println();
-        System.out.println(ANSI_BLUE+"Jogo em andamento:"+ANSI_RESET);
-        System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizInicial()));
-        System.out.print("Movimentos disponíveis: ");
-        System.out.println(ANSI_BLUE+tabuleiro.getMovimentosDisponiveis()+ANSI_RESET);
-        System.out.println("Ou digite 0 para sair");
-        System.out.println();
-        System.out.print("Informe o número que deseja movimentar: ");
+        terminal.vitoria(inicio);
+        terminal.rodape();
+        System.exit(0);
     }
 }
