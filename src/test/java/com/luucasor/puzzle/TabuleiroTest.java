@@ -1,6 +1,5 @@
 package com.luucasor.puzzle;
 
-import com.luucasor.puzzle.Tabuleiro.SetaEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,23 +55,23 @@ public class TabuleiroTest {
 
     @Test
     public void deveRetornarOsMovimentosDisponiveisNaMatrizInicial(){
-        List opcoes = this.tabuleiro.getOpcoesDeMovimentoDisponiveis();
-        Assertions.assertEquals(Arrays.asList(SetaEnum.CIMA, SetaEnum.ESQUERDA), opcoes);
+        List opcoes = this.tabuleiro.getMovimentosDisponiveis();
+        Assertions.assertEquals(Arrays.asList(SEIS, CINCO), opcoes);
     }
 
     @Test
     public void deveRetornarOsMovimentosDisponiveiNaMatrizEmbaralhadaVazioCentro(){
         this.tabuleiro.setMatrizInicial(construirMatrizEmbaralhadaVazioCentro());
-        List opcoes = this.tabuleiro.getOpcoesDeMovimentoDisponiveis();
-        Assertions.assertTrue(opcoes.contains(SetaEnum.ESQUERDA));
-        Assertions.assertTrue(opcoes.contains(SetaEnum.DIREITA));
-        Assertions.assertTrue(opcoes.contains(SetaEnum.CIMA));
-        Assertions.assertTrue(opcoes.contains(SetaEnum.BAIXO));
+        List opcoes = this.tabuleiro.getMovimentosDisponiveis();
+        Assertions.assertTrue(opcoes.contains(DOIS));
+        Assertions.assertTrue(opcoes.contains(CINCO));
+        Assertions.assertTrue(opcoes.contains(QUATRO));
+        Assertions.assertTrue(opcoes.contains(SEIS));
     }
 
     @Test
     public void deveRetornarOValorDasPecasAdjacentesReferenteAosMovimentosDisponiveisNaMatrizInicial(){
-        List<Integer> valores = this.tabuleiro.getValoresAdjacentesDentreOsMovimentosDisponiveis();
+        List<Integer> valores = this.tabuleiro.getMovimentosDisponiveis();
         Assertions.assertEquals(Arrays.asList(SEIS, CINCO), valores);
     }
 

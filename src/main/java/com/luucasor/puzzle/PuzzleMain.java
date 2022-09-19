@@ -58,9 +58,9 @@ public class PuzzleMain {
         System.out.println(ANSI_BLUE+"Jogo em andamento:"+ANSI_RESET);
         System.out.println(tabuleiro.imprimeMatriz(tabuleiro.getMatrizInicial()));
         System.out.print("Movimentos disponíveis: ");
-        System.out.println(ANSI_BLUE+tabuleiro.getValoresAdjacentesDentreOsMovimentosDisponiveis()+ANSI_RESET);
+        System.out.println(ANSI_BLUE+tabuleiro.getMovimentosDisponiveis()+ANSI_RESET);
         System.out.println("Ou digite 0 para sair");
         System.out.println();
-        System.out.print("Informe o movimento número desejado: ");
+        System.out.print("Informe o número que deseja movimentar: ");
     }
 }

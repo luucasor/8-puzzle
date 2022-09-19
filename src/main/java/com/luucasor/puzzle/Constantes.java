@@ -25,7 +25,4 @@ public class Constantes {
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_BLUE = "\u001B[34m";
 
-    public static final String ANSI_ITALIC = "\u001B[3m";
-    public static final String INVISIBLE_TEXT = "\u001B[8m";
-
 }

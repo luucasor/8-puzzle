@@ -31,16 +31,6 @@ public class Tabuleiro {
         return linha+","+coluna;
     }
 
-    public List getOpcoesDeMovimentoDisponiveis() {
-        HashMap<SetaEnum, Integer> movimentosDisponiveisESeusValoresAdjacentes = getMovimentosDisponiveisESeusValoresAdjacentes();
-        return Arrays.asList(movimentosDisponiveisESeusValoresAdjacentes.keySet().toArray());
-    }
-
-    public List getValoresAdjacentesDentreOsMovimentosDisponiveis() {
-        HashMap<SetaEnum, Integer> movimentosDisponiveisESeusValoresAdjacentes = getMovimentosDisponiveisESeusValoresAdjacentes();
-        return new ArrayList<>(movimentosDisponiveisESeusValoresAdjacentes.values());
-    }
-
     public String imprimeMatriz(int[][] matriz){
         String primeiraLinha = String.format("| %s | %s | %s |\n", tratarValor(matriz[LINHA_UM][COLUNA_UM]), tratarValor(matriz[LINHA_UM][COLUNA_DOIS]), tratarValor(matriz[LINHA_UM][COLUNA_TRES]));
         String segundaLinha  = String.format("| %s | %s | %s |\n", tratarValor(matriz[LINHA_DOIS][COLUNA_UM]), tratarValor(matriz[LINHA_DOIS][COLUNA_DOIS]), tratarValor(matriz[LINHA_DOIS][COLUNA_TRES]));
@@ -56,13 +46,68 @@ public class Tabuleiro {
         return trocaVazio(indicePretendido, indiceValorVazio);
     }
 
+    public List<Integer> getMovimentosDisponiveis() {
+        int[][] indiceValorVazio = this.getIndiceValorVazio();
+        List<Integer> movimentosDisponiveis = new ArrayList<>();
+
+        int linha = indiceValorVazio[0][0];
+        int coluna = indiceValorVazio[0][1];
+
+        Integer valorCima = null;
+        try {
+            valorCima = this.matrizInicial[linha-1][coluna];
+        } catch (ArrayIndexOutOfBoundsException e){
+            //System.out.println(e);
+        } finally {
+            if(!Objects.isNull(valorCima)){
+                movimentosDisponiveis.add(valorCima);
+            }
+        }
+
+        Integer valorBaixo = null;
+        try {
+            valorBaixo = this.matrizInicial[linha+1][coluna];
+        } catch (ArrayIndexOutOfBoundsException e){
+            //System.out.println(e);
+        } finally {
+            if(!Objects.isNull(valorBaixo)){
+                movimentosDisponiveis.add(valorBaixo);
+            }
+        }
+
+        Integer valorEsquerda = null;
+        try {
+            valorEsquerda = this.matrizInicial[linha][coluna-1];
+        } catch (ArrayIndexOutOfBoundsException e){
+            //System.out.println(e);
+        } finally {
+            if(!Objects.isNull(valorEsquerda)){
+                movimentosDisponiveis.add(valorEsquerda);
+            }
+        }
+
+        Integer valorDireita = null;
+        try {
+            valorDireita = this.matrizInicial[linha][coluna+1];
+        } catch (ArrayIndexOutOfBoundsException e){
+            //System.out.println(e);
+        } finally {
+            if(!Objects.isNull(valorDireita)){
+                movimentosDisponiveis.add(valorDireita);
+            }
+        }
+        return movimentosDisponiveis;
+    }
+
+    public boolean venceu() {
+        return Arrays.deepEquals(matrizInicial, matrizAlvo);
+    }
+
     private boolean trocaVazio(int[][] indicePretendido, int[][] indiceValorVazio) {
         boolean trocou = false;
         try {
             int valorPretendido = this.matrizInicial[indicePretendido[0][0]][indicePretendido[0][1]];
-            List valoresDisponiveis = getValoresAdjacentesDentreOsMovimentosDisponiveis();
-
-            if(valoresDisponiveis.contains(valorPretendido)){
+            if(getMovimentosDisponiveis().contains(valorPretendido)){
                 this.matrizInicial[indiceValorVazio[0][0]][indiceValorVazio[0][1]] = valorPretendido;
                 this.matrizInicial[indicePretendido[0][0]][indicePretendido[0][1]] = VAZIO;
                 trocou = true;
@@ -94,66 +139,5 @@ public class Tabuleiro {
 
     private int[][] getIndiceValorVazio() {
         return getIndiceValor(VAZIO);
-    }
-
-    private HashMap<SetaEnum, Integer> getMovimentosDisponiveisESeusValoresAdjacentes() {
-        int[][] indiceValorVazio = this.getIndiceValorVazio();
-        HashMap<SetaEnum, Integer> movimentosDisponiveisESeusValoresAdjacentes = new HashMap<>();
-
-        int linha = indiceValorVazio[0][0];
-        int coluna = indiceValorVazio[0][1];
-
-        Integer valorCima = null;
-        try {
-            valorCima = this.matrizInicial[linha-1][coluna];
-        } catch (ArrayIndexOutOfBoundsException e){
-            //System.out.println(e);
-        } finally {
-            if(!Objects.isNull(valorCima)){
-                movimentosDisponiveisESeusValoresAdjacentes.put(SetaEnum.CIMA, valorCima);
-            }
-        }
-
-        Integer valorBaixo = null;
-        try {
-            valorBaixo = this.matrizInicial[linha+1][coluna];
-        } catch (ArrayIndexOutOfBoundsException e){
-            //System.out.println(e);
-        } finally {
-            if(!Objects.isNull(valorBaixo)){
-                movimentosDisponiveisESeusValoresAdjacentes.put(SetaEnum.BAIXO, valorBaixo);
-            }
-        }
-
-        Integer valorEsquerda = null;
-        try {
-            valorEsquerda = this.matrizInicial[linha][coluna-1];
-        } catch (ArrayIndexOutOfBoundsException e){
-            //System.out.println(e);
-        } finally {
-            if(!Objects.isNull(valorEsquerda)){
-                movimentosDisponiveisESeusValoresAdjacentes.put(SetaEnum.ESQUERDA, valorEsquerda);
-            }
-        }
-
-        Integer valorDireita = null;
-        try {
-            valorDireita = this.matrizInicial[linha][coluna+1];
-        } catch (ArrayIndexOutOfBoundsException e){
-            //System.out.println(e);
-        } finally {
-            if(!Objects.isNull(valorDireita)){
-                movimentosDisponiveisESeusValoresAdjacentes.put(SetaEnum.DIREITA, valorDireita);
-            }
-        }
-        return movimentosDisponiveisESeusValoresAdjacentes;
-    }
-
-    public boolean venceu() {
-        return Arrays.deepEquals(matrizInicial, matrizAlvo);
-    }
-
-    public enum SetaEnum {
-        CIMA, BAIXO, ESQUERDA, DIREITA;
     }
 }
