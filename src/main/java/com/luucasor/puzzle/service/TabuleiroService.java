@@ -1,5 +1,6 @@
 package com.luucasor.puzzle.service;
 
+import com.luucasor.puzzle.model.Casa;
 import com.luucasor.puzzle.model.Tabuleiro;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,16 +23,14 @@ public class TabuleiroService {
     }
 
     public List<Integer> getMovimentosDisponiveis() {
-        int[][] indiceValorVazio = this.getIndiceValorVazio();
+        Casa casaValorVazio = this.getCasaValor(VAZIO);
         List<Integer> movimentosDisponiveis = new ArrayList<>();
 
-        int linha = indiceValorVazio[0][0];
-        int coluna = indiceValorVazio[0][1];
         int[][] matrizInicial = this.tabuleiro.getMatrizInicial();
 
         Integer valorCima = null;
         try {
-            valorCima = matrizInicial[linha-1][coluna];
+            valorCima = matrizInicial[casaValorVazio.getLinha()-1][casaValorVazio.getColuna()];
         } catch (ArrayIndexOutOfBoundsException e){
             //System.out.println(e);
         } finally {
@@ -42,7 +41,7 @@ public class TabuleiroService {
 
         Integer valorBaixo = null;
         try {
-            valorBaixo = matrizInicial[linha+1][coluna];
+            valorBaixo = matrizInicial[casaValorVazio.getLinha()+1][casaValorVazio.getColuna()];
         } catch (ArrayIndexOutOfBoundsException e){
             //System.out.println(e);
         } finally {
@@ -53,7 +52,7 @@ public class TabuleiroService {
 
         Integer valorEsquerda = null;
         try {
-            valorEsquerda = matrizInicial[linha][coluna-1];
+            valorEsquerda = matrizInicial[casaValorVazio.getLinha()][casaValorVazio.getColuna()-1];
         } catch (ArrayIndexOutOfBoundsException e){
             //System.out.println(e);
         } finally {
@@ -64,7 +63,7 @@ public class TabuleiroService {
 
         Integer valorDireita = null;
         try {
-            valorDireita = matrizInicial[linha][coluna+1];
+            valorDireita = matrizInicial[casaValorVazio.getLinha()][casaValorVazio.getColuna()+1];
         } catch (ArrayIndexOutOfBoundsException e){
             //System.out.println(e);
         } finally {
@@ -76,27 +75,24 @@ public class TabuleiroService {
     }
 
     public boolean movimentar(int valor) {
-        int[][] indicePretendido = this.getIndiceValor(valor);
-        int[][] indiceValorVazio = this.getIndiceValorVazio();
-
-        return trocaVazio(indicePretendido, indiceValorVazio);
+        Casa casaPretendida = this.getCasaValor(valor);
+        Casa casaValorVazio = this.getCasaValor(VAZIO);
+        return trocaVazio(casaPretendida, casaValorVazio);
     }
 
-    private boolean trocaVazio(int[][] indicePretendido, int[][] indiceValorVazio) {
+    private boolean trocaVazio(Casa casaPretendida, Casa casaValorVazio) {
         boolean trocou = false;
         int[][] matrizInicial = this.tabuleiro.getMatrizInicial();
+
         try {
-            int valorPretendido = matrizInicial[indicePretendido[0][0]][indicePretendido[0][1]];
-            if(getMovimentosDisponiveis().contains(valorPretendido)){
-                matrizInicial[indiceValorVazio[0][0]][indiceValorVazio[0][1]] = valorPretendido;
-                matrizInicial[indicePretendido[0][0]][indicePretendido[0][1]] = VAZIO;
+            if(getMovimentosDisponiveis().contains(casaPretendida.getValor())){
+                matrizInicial[casaValorVazio.getLinha()][casaValorVazio.getColuna()] = casaPretendida.getValor();
+                matrizInicial[casaPretendida.getLinha()][casaPretendida.getColuna()] = VAZIO;
+                this.tabuleiro.incrementaNumeroJogadas();
                 trocou = true;
             }
         } catch (ArrayIndexOutOfBoundsException e){
             //System.out.println(e);
-        }
-        if(trocou){
-            this.tabuleiro.incrementaNumeroJogadas();
         }
         return trocou;
     }
@@ -105,32 +101,27 @@ public class TabuleiroService {
         return Arrays.deepEquals(this.tabuleiro.getMatrizInicial(), this.tabuleiro.getMatrizAlvo());
     }
 
-    private int[][] getIndiceValor(int valor) {
-        int[][] indiceValor = new int[0][0];
+    private Casa getCasaValor(int valor) {
+        Casa casa = null;
         int[][] matrizInicial = this.tabuleiro.getMatrizInicial();
+        boolean encontrou = false;
         for (int linha = 0; linha < matrizInicial.length; linha++){
             for (int coluna = 0; coluna < matrizInicial.length; coluna++){
                 if(matrizInicial[linha][coluna] == valor){
-                    indiceValor = new int[][]{
-                            {linha,coluna}
-                    };
+                    casa = new Casa(linha, coluna, valor);
+                    break;
                 }
             }
+            if(encontrou){
+                break;
+            }
         }
-        return indiceValor;
-    }
-
-    private int[][] getIndiceValorVazio() {
-        return getIndiceValor(VAZIO);
+        return casa;
     }
 
     public String getStringIndiceValorVazio(){
-        int[][] indiceValorVazio = this.getIndiceValorVazio();
-
-        int linha = indiceValorVazio[0][0];
-        int coluna = indiceValorVazio[0][1];
-
-        return linha+","+coluna;
+        Casa casaValorVazio = this.getCasaValor(VAZIO);
+        return casaValorVazio.getLinha()+","+casaValorVazio.getColuna();
     }
 
     public String getStringNivelEscolhido() {

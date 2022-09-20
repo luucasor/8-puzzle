@@ -83,8 +83,9 @@ public class TabuleiroTest {
     }
 
     @Test
-    public void deveRetornarOIndiceDoValorVazioNaMatrizInicial(){
-        Assertions.assertEquals("2,2", this.tabuleiroService.getStringIndiceValorVazio());
+    public void deveRetornarOIndiceDoValorVazioNaMatrizEmbaralhadaVazioCentro(){
+        this.tabuleiro.setMatrizInicial(construirMatrizEmbaralhadaVazioCentro());
+        Assertions.assertEquals("1,1", this.tabuleiroService.getStringIndiceValorVazio());
     }
 
     @Test
